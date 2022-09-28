@@ -10,29 +10,34 @@ var message = new HelloRequest { Name = "Bruno" };
 
 //await ExecuteClientPooling(message);
 
+//FundBeanStream f;
+//f = new FundBeanStream();
+//f = new FundBeanStream();
+
 BenchmarkRunner.Run<BenchmarksClientPool>();
+
 Console.ReadLine();
 
 static async Task ExecuteClientPooling(HelloRequest message)
 {
-    ClientPool<Greeter.GreeterClient> factory = new ClientPool<Greeter.GreeterClient>();
+    ClientPool<Greeter.GreeterClient> pool = new ClientPool<Greeter.GreeterClient>();
     //factory.Create();
-    var myclient = factory.Get();
+    var myclient = pool.Get();
     var mySrerveReply = await myclient.SayHelloAsync(message);
     Console.WriteLine(mySrerveReply.Message);
-    factory.Return(myclient);
+    pool.Return(myclient);
 
-    var myclient2 = factory.Get();
+    var myclient2 = pool.Get();
     var mySrerveReply2 = await myclient2.SayHelloAsync(message);
     Console.WriteLine(mySrerveReply2.Message);
     Console.WriteLine(myclient == myclient2); //Return true
                                               //factory.Return(myclient2);
 
 
-    var myclient3 = factory.Get();
+    var myclient3 = pool.Get();
     var mySrerveReply3 = await myclient3.SayHelloAsync(message);
     Console.WriteLine(mySrerveReply3.Message);
-    factory.Return(myclient3);
+    pool.Return(myclient3);
     Console.WriteLine(myclient == myclient3);//Return false
 }
 
